@@ -3,97 +3,6 @@ import './Hero.css';
 
 const RESUME_URL = 'https://drive.google.com/file/d/1-ryW-Ycm13d3RWEMUZtK3-7kiUNzW36b/view?usp=sharing';
 
-/* ── Elegant geometric SVG portrait placeholder ─────────── */
-function PortraitSVG() {
-  return (
-    <svg
-      className="hero__portrait-svg"
-      viewBox="0 0 360 480"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Sangita Chowdhury — portrait placeholder"
-    >
-      {/* Background */}
-      <rect width="360" height="480" fill="#141210"/>
-
-      {/* Fine grid */}
-      {Array.from({ length: 18 }).map((_, i) => (
-        <line
-          key={`v${i}`}
-          x1={i * 20} y1="0"
-          x2={i * 20} y2="480"
-          stroke="rgba(201,178,124,0.04)"
-          strokeWidth="0.5"
-        />
-      ))}
-      {Array.from({ length: 24 }).map((_, i) => (
-        <line
-          key={`h${i}`}
-          x1="0" y1={i * 20}
-          x2="360" y2={i * 20}
-          stroke="rgba(201,178,124,0.04)"
-          strokeWidth="0.5"
-        />
-      ))}
-
-      {/* Outer ring */}
-      <circle cx="180" cy="220" r="140" stroke="rgba(201,178,124,0.08)" strokeWidth="0.75" fill="none" strokeDasharray="12 8"/>
-      <circle cx="180" cy="220" r="110" stroke="rgba(201,178,124,0.06)" strokeWidth="0.5" fill="none"/>
-
-      {/* Inner geometric — abstract portrait silhouette hint */}
-      <ellipse cx="180" cy="168" rx="42" ry="48" fill="rgba(201,178,124,0.05)" stroke="rgba(201,178,124,0.15)" strokeWidth="0.75"/>
-      <path d="M120 310 Q120 255 180 248 Q240 255 240 310 L240 340 Q240 360 220 360 L140 360 Q120 360 120 340 Z"
-        fill="rgba(201,178,124,0.04)" stroke="rgba(201,178,124,0.12)" strokeWidth="0.75"/>
-
-      {/* Decorative geometry — data/network motif */}
-      <line x1="60" y1="80" x2="180" y2="140" stroke="rgba(201,178,124,0.12)" strokeWidth="0.5"/>
-      <line x1="300" y1="80" x2="180" y2="140" stroke="rgba(201,178,124,0.12)" strokeWidth="0.5"/>
-      <line x1="60" y1="380" x2="180" y2="320" stroke="rgba(201,178,124,0.08)" strokeWidth="0.5"/>
-      <line x1="300" y1="380" x2="180" y2="320" stroke="rgba(201,178,124,0.08)" strokeWidth="0.5"/>
-
-      {/* Node dots */}
-      <circle cx="60" cy="80" r="3" fill="rgba(201,178,124,0.3)"/>
-      <circle cx="300" cy="80" r="3" fill="rgba(201,178,124,0.3)"/>
-      <circle cx="180" cy="140" r="4" fill="rgba(201,178,124,0.4)"/>
-      <circle cx="60" cy="380" r="3" fill="rgba(201,178,124,0.2)"/>
-      <circle cx="300" cy="380" r="3" fill="rgba(201,178,124,0.2)"/>
-      <circle cx="180" cy="320" r="4" fill="rgba(201,178,124,0.3)"/>
-
-      {/* Central monogram */}
-      <text
-        x="180" y="232"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fontFamily="'Cormorant Garamond', Georgia, serif"
-        fontSize="52"
-        fontWeight="300"
-        fill="rgba(201,178,124,0.35)"
-        letterSpacing="4"
-      >
-        SC
-      </text>
-
-      {/* Bottom label */}
-      <text
-        x="180" y="440"
-        textAnchor="middle"
-        fontFamily="'Inter', sans-serif"
-        fontSize="8"
-        fontWeight="400"
-        fill="rgba(169,162,152,0.5)"
-        letterSpacing="3"
-      >
-        PHOTO COMING SOON
-      </text>
-
-      {/* Corner marks */}
-      <path d="M20 20 L40 20 L40 22 L22 22 L22 40 L20 40 Z" fill="rgba(201,178,124,0.25)"/>
-      <path d="M340 20 L320 20 L320 22 L338 22 L338 40 L340 40 Z" fill="rgba(201,178,124,0.25)"/>
-      <path d="M20 460 L40 460 L40 458 L22 458 L22 440 L20 440 Z" fill="rgba(201,178,124,0.25)"/>
-      <path d="M340 460 L320 460 L320 458 L338 458 L338 440 L340 440 Z" fill="rgba(201,178,124,0.25)"/>
-    </svg>
-  );
-}
 
 export default function Hero() {
   const heroRef = useRef(null);
@@ -219,7 +128,11 @@ export default function Hero() {
             <div className="hero__glow" aria-hidden="true" />
 
             <div className="hero__portrait-frame">
-              <PortraitSVG />
+              <img 
+                src="/profile-photo.jpg" 
+                alt="Sangita Chowdhury" 
+                className="hero__portrait-img" 
+              />
             </div>
 
             {/* Status badge */}
