@@ -1,15 +1,314 @@
-/* ── App Shell ───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   LUXURY PORTFOLIO — GLOBAL DESIGN SYSTEM
+   Sangita Chowdhury · AI/ML Developer
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Design Tokens ────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --bg-obsidian:     #0B0A08;
+  --bg-charcoal:     #141210;
+  --bg-surface:      #1A1814;
+  --bg-surface-2:    #201E1A;
+
+  --text-ivory:      #F2EEE6;
+  --text-muted:      #A9A298;
+  --text-dim:        #6B655D;
+
+  --gold:            #C9B27C;
+  --gold-dim:        rgba(201,178,124,0.18);
+  --gold-line:       rgba(201,178,124,0.14);
+  --gold-glow:       rgba(201,178,124,0.06);
+  --bronze:          #8F7650;
+
+  --border:          rgba(201,178,124,0.10);
+  --border-hover:    rgba(201,178,124,0.28);
+
+  /* Typography */
+  --font-serif:      'Cormorant Garamond', Georgia, serif;
+  --font-sans:       'Inter', system-ui, sans-serif;
+
+  /* Spacing */
+  --container-max:   1160px;
+  --section-pad:     120px;
+  --section-pad-sm:  72px;
+
+  /* Motion */
+  --ease-out:        cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:     cubic-bezier(0.45, 0, 0.55, 1);
+  --dur-fast:        160ms;
+  --dur-base:        300ms;
+  --dur-slow:        600ms;
+  --dur-xslow:       900ms;
+}
+
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--bg-obsidian);
+  color: var(--text-ivory);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.65;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Luxurious background image layer */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('/luxury-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  /* Blending effects */
+  opacity: 0.15; /* Reduced opacity so obsidian background shows through */
+  filter: blur(4px); /* Blur effect */
+  mix-blend-mode: screen; /* Optional blending to make golds pop against the dark obsidian */
+  
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Subtle grain texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 1;
+}
+
+img, svg { display: block; }
+a { color: inherit; text-decoration: none; }
+button { border: none; background: none; cursor: pointer; font: inherit; }
+ul, ol { list-style: none; }
+
+/* ── Typography ────────────────────────────────────────────── */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text-ivory);
+}
+
+h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 500;
+}
+
+/* ── Container ────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ── Section base ─────────────────────────────────────────── */
+.section {
+  padding: var(--section-pad) 0;
+  position: relative;
+}
+
+/* Section label — small gold uppercase tag */
+.section-label {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+/* Section title */
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text-ivory);
+  margin-bottom: 20px;
+}
+
+/* Section subtitle */
+.section-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ── Divider line ─────────────────────────────────────────── */
+.gold-line {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 12px 24px;
+  border-radius: 2px;
+  transition: all var(--dur-base) var(--ease-out);
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--bg-obsidian);
+  border: 1px solid var(--gold);
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-ivory);
+  border: 1px solid var(--border-hover);
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  padding: 12px 16px;
+}
+
+.btn-ghost:hover {
+  color: var(--text-ivory);
+  border-color: var(--border);
+}
+
+/* ── App shell ────────────────────────────────────────────── */
 .app-shell {
   opacity: 0;
-  transition: opacity 0.5s ease;
-  position: relative;
-  z-index: 1;
+  transition: opacity var(--dur-slow) var(--ease-out);
 }
 
 .app-shell--visible {
   opacity: 1;
 }
 
-main {
-  padding-top: 72px; /* navbar height offset */
+/* ── Scroll reveal ────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--dur-xslow) var(--ease-out),
+    transform var(--dur-xslow) var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Tags / chips ─────────────────────────────────────────── */
+.tag {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 2px;
+  display: inline-block;
+  transition: border-color var(--dur-fast), color var(--dur-fast);
+}
+
+.tag:hover {
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
+
+/* ── Focus visible ────────────────────────────────────────── */
+:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* ── Selection ────────────────────────────────────────────── */
+::selection {
+  background: var(--gold-dim);
+  color: var(--text-ivory);
+}
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-obsidian); }
+::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 2px; }
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .section { padding: var(--section-pad-sm) 0; }
+}
+
+/* ── Reduced motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }

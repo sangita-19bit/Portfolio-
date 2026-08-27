@@ -28,14 +28,16 @@ export default function App() {
       >
         <ScrollProgress />
         <Navbar />
-        <main>
+
+        <main id="main-content">
           <Hero />
           <About />
-          <Skills />
           <Projects />
+          <Skills />
           <Education />
           <Contact />
         </main>
+
         <Footer />
       </div>
     </>

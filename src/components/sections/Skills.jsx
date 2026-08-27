@@ -2,11 +2,8 @@ import { useEffect, useRef } from 'react';
 import { skillCategories } from '../../data/skills';
 import './Skills.css';
 
-const ACCENT_COLORS = {
-  indigo: { bg: 'rgba(99,102,241,0.07)', border: 'rgba(99,102,241,0.2)', text: '#818cf8' },
-  violet: { bg: 'rgba(139,92,246,0.07)', border: 'rgba(139,92,246,0.2)', text: '#a78bfa' },
-  sky:    { bg: 'rgba(56,189,248,0.07)', border: 'rgba(56,189,248,0.2)', text: '#7dd3fc' },
-};
+/* Map category index to formatted number */
+const toNum = i => String(i + 1).padStart(2, '0');
 
 export default function Skills() {
   const sectionRef = useRef(null);
@@ -33,52 +30,31 @@ export default function Skills() {
       <div className="container">
 
         <div className="skills__header reveal">
-          <p className="section-label">Tech Stack</p>
-          <h2 className="section-title">
-            Technical foundations with modern AI fluency.
-          </h2>
-          <p className="section-subtitle">
-            A curated set of technologies I actively use across projects — organized by domain.
-          </p>
+          <p className="section-label">Expertise</p>
+          <h2 className="section-title">Technical Expertise</h2>
         </div>
 
-        <div className="skills__grid">
-          {skillCategories.map((cat, i) => {
-            const colors = ACCENT_COLORS[cat.accent] || ACCENT_COLORS.indigo;
-            return (
-              <article
-                key={cat.id}
-                className="skill-card reveal"
-                style={{ transitionDelay: `${i * 70}ms` }}
-              >
-                <div
-                  className="skill-card__icon"
-                  style={{ color: colors.text }}
-                  aria-hidden="true"
-                >
-                  {cat.icon}
-                </div>
-                <h3 className="skill-card__title">{cat.label}</h3>
-                <p className="skill-card__desc">{cat.description}</p>
+        <div className="skills__list">
+          {skillCategories.map((cat, i) => (
+            <div
+              key={cat.id}
+              className="skill-row reveal"
+              style={{ transitionDelay: `${i * 70}ms` }}
+            >
+              <span className="skill-row__num" aria-hidden="true">{toNum(i)}</span>
 
-                <div className="skill-card__tags">
-                  {cat.skills.map(skill => (
-                    <span
-                      key={skill}
-                      className="skill-pill"
-                      style={{
-                        background: colors.bg,
-                        borderColor: colors.border,
-                        color: colors.text,
-                      }}
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            );
-          })}
+              <div className="skill-row__info">
+                <h3 className="skill-row__category">{cat.label}</h3>
+                <p className="skill-row__desc">{cat.description}</p>
+              </div>
+
+              <ul className="skill-row__skills" aria-label={`${cat.label} skills`}>
+                {cat.skills.map(skill => (
+                  <li key={skill} className="skill-row__skill">{skill}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
       </div>

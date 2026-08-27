@@ -2,11 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import './Navbar.css';
 
 const NAV_LINKS = [
-  { label: 'About',      href: '#about'      },
-  { label: 'Skills',     href: '#skills'      },
-  { label: 'Projects',   href: '#projects'    },
-  { label: 'Education',  href: '#education'   },
-  { label: 'Contact',    href: '#contact'     },
+  { label: 'About',     href: '#about'     },
+  { label: 'Work',      href: '#projects'  },
+  { label: 'Skills',    href: '#skills'    },
+  { label: 'Education', href: '#education' },
+  { label: 'Contact',   href: '#contact'   },
 ];
 
 const RESUME_URL = 'https://drive.google.com/file/d/1-ryW-Ycm13d3RWEMUZtK3-7kiUNzW36b/view?usp=sharing';
@@ -16,14 +16,14 @@ export default function Navbar() {
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [activeId,  setActiveId]  = useState('');
 
-  /* ── Scroll detection ──────────────────────────────── */
+  /* ── Scroll detection ─────────────────────────────────── */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* ── Active section via IntersectionObserver ───────── */
+  /* ── Active section via IntersectionObserver ──────────── */
   useEffect(() => {
     const sections = document.querySelectorAll('section[id]');
     const obs = new IntersectionObserver(
@@ -32,13 +32,12 @@ export default function Navbar() {
           if (e.isIntersecting) setActiveId(e.target.id);
         });
       },
-      { threshold: 0.25, rootMargin: '-60px 0px -40% 0px' }
+      { threshold: 0.25, rootMargin: '-68px 0px -40% 0px' }
     );
     sections.forEach(s => obs.observe(s));
     return () => obs.disconnect();
   }, []);
 
-  /* ── Close menu on outside click ──────────────────── */
   const closeMenu = useCallback(() => {
     setMenuOpen(false);
     document.body.style.overflow = '';
@@ -50,7 +49,6 @@ export default function Navbar() {
     document.body.style.overflow = next ? 'hidden' : '';
   };
 
-  /* ── Smooth scroll helper ──────────────────────────── */
   const handleNavClick = (e, href) => {
     e.preventDefault();
     closeMenu();
@@ -62,6 +60,7 @@ export default function Navbar() {
     <>
       <header className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`} id="navbar">
         <div className="navbar__inner">
+
           {/* Brand */}
           <a
             href="#hero"
@@ -69,7 +68,7 @@ export default function Navbar() {
             aria-label="Sangita Chowdhury — Home"
             onClick={e => handleNavClick(e, '#hero')}
           >
-            <span className="navbar__monogram">SC</span>
+            <span className="navbar__monogram" aria-hidden="true">SC</span>
             <span className="navbar__name">Sangita Chowdhury</span>
           </a>
 
@@ -89,7 +88,8 @@ export default function Navbar() {
               href={RESUME_URL}
               target="_blank"
               rel="noreferrer"
-              className="btn btn-primary navbar__resume"
+              className="btn btn-secondary navbar__resume"
+              aria-label="View Resume (opens in new tab)"
             >
               Resume ↗
             </a>
@@ -114,6 +114,7 @@ export default function Navbar() {
         id="mobile-menu"
         role="dialog"
         aria-label="Mobile navigation"
+        aria-modal="true"
       >
         <nav className="mobile-menu__nav">
           {NAV_LINKS.map(link => (
@@ -133,12 +134,11 @@ export default function Navbar() {
             className="btn btn-primary mobile-menu__resume"
             onClick={closeMenu}
           >
-            Download Resume ↗
+            View Resume ↗
           </a>
         </nav>
       </div>
 
-      {/* Overlay */}
       {menuOpen && (
         <div className="mobile-overlay" onClick={closeMenu} aria-hidden="true" />
       )}

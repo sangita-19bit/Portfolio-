@@ -1,14 +1,15 @@
-/* ── Loading Screen ──────────────────────────────────── */
+/* ── Loading Screen — Luxury Gold Palette ───────────────── */
 .loader-screen {
   position: fixed;
   inset: 0;
-  background: #04060f;
-  z-index: 9999;
+  background: #0B0A08;
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  transition: opacity 0.55s ease, visibility 0.55s ease;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.6s;
 }
 
 .loader-exit {
@@ -16,35 +17,34 @@
   pointer-events: none;
 }
 
-/* Background glow */
+/* Background glow — warm gold */
 .loader-glow {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(99,102,241,0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 35% at 50% 60%, rgba(56,189,248,0.10) 0%, transparent 70%);
+    radial-gradient(ellipse 50% 45% at 50% 40%, rgba(201,178,124,0.07) 0%, transparent 70%);
   pointer-events: none;
 }
 
-/* Neural network SVG */
+/* Network SVG */
 .loader-network {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.7;
+  opacity: 0.45;
 }
 
 .loader-network svg {
-  width: min(320px, 65vw);
+  width: min(300px, 60vw);
   height: auto;
 }
 
 /* Spinning dashed ring */
 .loader-spin-ring {
   transform-origin: 160px 200px;
-  animation: loader-ring-spin 8s linear infinite;
+  animation: loader-ring-spin 12s linear infinite;
 }
 
 @keyframes loader-ring-spin {
@@ -54,14 +54,14 @@
 
 /* Node animations */
 @keyframes pulse-ring-loader {
-  0%   { r: 8;  opacity: 0.5; }
-  50%  { r: 14; opacity: 0.15; }
-  100% { r: 8;  opacity: 0; }
+  0%   { stroke-width: 1; opacity: 0.4; r: 8; }
+  50%  { stroke-width: 0.5; opacity: 0.1; r: 14; }
+  100% { stroke-width: 0; opacity: 0; r: 16; }
 }
 
 @keyframes node-glow {
-  0%, 100% { fill: #6366f1; r: 4; filter: none; }
-  50%       { fill: #818cf8; r: 5.5; filter: drop-shadow(0 0 6px rgba(99,102,241,0.8)); }
+  0%, 100% { opacity: 0.6; r: 3.5; }
+  50%       { opacity: 1;   r: 4.5; }
 }
 
 /* Center content */
@@ -71,82 +71,75 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   text-align: center;
 }
 
 .loader-monogram {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 3.5rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  background: linear-gradient(135deg, #6366f1 0%, #818cf8 50%, #38bdf8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 4rem;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: #C9B27C;
   line-height: 1;
-  animation: loader-mono-in 0.6s ease forwards;
-  margin-bottom: 10px;
-  filter: drop-shadow(0 0 24px rgba(99,102,241,0.4));
+  animation: loader-mono-in 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+  margin-bottom: 12px;
 }
 
 @keyframes loader-mono-in {
-  from { opacity: 0; transform: scale(0.85); }
-  to   { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: scale(0.9) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .loader-name {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #eef2ff;
-  letter-spacing: 0.04em;
-  animation: fade-up 0.6s 0.2s ease forwards;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #F2EEE6;
+  letter-spacing: 0.06em;
+  animation: fade-up-loader 0.6s 0.3s ease forwards;
   opacity: 0;
 }
 
 .loader-role {
-  font-size: 0.72rem;
-  color: #6b7a9e;
-  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+  color: #A9A298;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-weight: 500;
-  animation: fade-up 0.6s 0.35s ease forwards;
+  font-weight: 400;
+  animation: fade-up-loader 0.6s 0.45s ease forwards;
   opacity: 0;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 /* Progress bar */
 .loader-bar-wrap {
-  width: 180px;
-  height: 2px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 999px;
+  width: 160px;
+  height: 1px;
+  background: rgba(201,178,124,0.12);
   overflow: hidden;
-  animation: fade-up 0.5s 0.5s ease forwards;
+  animation: fade-up-loader 0.5s 0.6s ease forwards;
   opacity: 0;
 }
 
 .loader-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #6366f1, #818cf8, #38bdf8);
-  border-radius: 999px;
+  background: linear-gradient(90deg, #8F7650, #C9B27C);
   transition: width 0.1s linear;
-  box-shadow: 0 0 10px rgba(99,102,241,0.6);
 }
 
 .loader-percent {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.7rem;
-  color: #6b7a9e;
-  letter-spacing: 0.1em;
-  font-weight: 600;
-  margin-top: 6px;
-  animation: fade-up 0.5s 0.55s ease forwards;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.625rem;
+  color: #6B655D;
+  letter-spacing: 0.14em;
+  font-weight: 500;
+  margin-top: 8px;
+  animation: fade-up-loader 0.5s 0.65s ease forwards;
   opacity: 0;
 }
 
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(10px); }
+@keyframes fade-up-loader {
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }

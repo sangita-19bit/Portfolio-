@@ -1,45 +1,78 @@
-/* ── Footer ──────────────────────────────────────────── */
+/* ── Footer — Minimal luxury ─────────────────────────────── */
 .footer {
-  margin-top: 80px;
-  padding: 28px 0;
   border-top: 1px solid var(--border);
+  padding: 40px 0;
+  background: transparent;
 }
 
 .footer__inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
   flex-wrap: wrap;
 }
 
 .footer__brand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.95rem;
-  background: var(--grad-accent);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.footer__copy {
-  color: var(--muted);
-  font-size: 0.82rem;
+.footer__name {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-ivory);
+  letter-spacing: 0.02em;
+}
+
+.footer__role {
+  font-size: 0.6875rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .footer__links {
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 24px;
 }
-.footer__links a {
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 500;
-  transition: color 0.2s ease;
+
+.footer__link {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  transition: color var(--dur-fast);
+  text-decoration: none;
 }
-.footer__links a:hover { color: var(--violet); }
+
+.footer__link:hover { color: var(--gold); }
+
+.footer__right {
+  font-size: 0.6875rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+}
+
+/* Gold separator dot */
+.footer__sep {
+  color: var(--gold);
+  opacity: 0.5;
+}
 
 @media (max-width: 640px) {
-  .footer__inner { flex-direction: column; align-items: center; text-align: center; }
+  .footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 0 20px;
+  }
+
+  .footer__links { gap: 16px; flex-wrap: wrap; }
 }

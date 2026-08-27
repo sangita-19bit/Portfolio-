@@ -73,4 +73,11 @@ export const profiles = [
     url: 'https://www.linkedin.com/in/sangita-as196/',
     description: 'Professional profile',
   },
+  {
+    id: 'leetcode',
+    label: 'LeetCode',
+    handle: 'Schowdhury85',
+    url: 'https://leetcode.com/u/Schowdhury85/',
+    description: 'Problem solving & DSA',
+  },
 ];
