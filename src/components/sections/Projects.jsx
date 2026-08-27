@@ -38,14 +38,14 @@ const PROJECT_VISUALS = {
     </svg>
   ),
 
-  'student-mgmt': ({ className }) => (
+  'blinkexam': ({ className }) => (
     <svg className={className} viewBox="0 0 560 480" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <rect width="560" height="480" fill="#1C1A17"/>
       {/* Grid base */}
       {Array.from({ length: 14 }).map((_, i) => (
         <line key={`v${i}`} x1={i * 40} y1="0" x2={i * 40} y2="480" stroke="rgba(201,178,124,0.03)" strokeWidth="0.5"/>
       ))}
-      {/* Table / data structure motif */}
+      {/* Table / data structure motif (repurposed as exam dashboard) */}
       <rect x="100" y="100" width="360" height="260" fill="none" stroke="rgba(201,178,124,0.14)" strokeWidth="1"/>
       {/* Header row */}
       <rect x="100" y="100" width="360" height="44" fill="rgba(201,178,124,0.04)" stroke="none"/>
@@ -61,7 +61,7 @@ const PROJECT_VISUALS = {
       <rect x="116" y="116" width="72" height="10" rx="1" fill="rgba(201,178,124,0.15)"/>
       <rect x="236" y="116" width="56" height="10" rx="1" fill="rgba(201,178,124,0.12)"/>
       <rect x="346" y="116" width="64" height="10" rx="1" fill="rgba(201,178,124,0.12)"/>
-      {/* Row content hints */}
+      {/* Row content hints (quiz scores, statuses) */}
       {[0, 1, 2, 3].map(r => (
         <g key={r}>
           <circle cx="124" cy={168 + r * 54} r="10" fill="rgba(201,178,124,0.06)" stroke="rgba(201,178,124,0.1)" strokeWidth="0.5"/>
@@ -71,8 +71,8 @@ const PROJECT_VISUALS = {
         </g>
       ))}
       {/* API endpoint hint */}
-      <text x="100" y="400" fontFamily="Inter, sans-serif" fontSize="7" fill="rgba(201,178,124,0.25)" letterSpacing="1.5">GET /api/students   POST /api/students   DELETE /api/students/:id</text>
-      <text x="100" y="430" fontFamily="Inter, sans-serif" fontSize="8" fill="rgba(201,178,124,0.25)" letterSpacing="2">REACT · SPRING BOOT · MONGODB · REST API</text>
+      <text x="100" y="400" fontFamily="Inter, sans-serif" fontSize="7" fill="rgba(201,178,124,0.25)" letterSpacing="1.5">WSS // REAL-TIME EVALUATION // SECURE EXAM SESSION</text>
+      <text x="100" y="430" fontFamily="Inter, sans-serif" fontSize="8" fill="rgba(201,178,124,0.25)" letterSpacing="2">NEXT.JS · REACT · SPRING BOOT · MONGODB</text>
     </svg>
   ),
 
