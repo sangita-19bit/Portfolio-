@@ -262,7 +262,7 @@
 /* Status badge */
 .hero__badge {
   position: absolute;
-  bottom: -16px;
+  top: -16px;
   left: -16px;
   display: flex;
   align-items: center;

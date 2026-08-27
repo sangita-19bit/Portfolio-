@@ -108,7 +108,7 @@ export default function Hero() {
               <span>B.E. CSE, CU</span>
             </li>
             <li>
-              <strong>6.79</strong>
+              <strong>7.0</strong>
               <span>Current CGPA</span>
             </li>
             <li>
