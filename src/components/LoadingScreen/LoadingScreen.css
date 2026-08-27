@@ -1,0 +1,152 @@
+/* ── Loading Screen ──────────────────────────────────── */
+.loader-screen {
+  position: fixed;
+  inset: 0;
+  background: #04060f;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.55s ease, visibility 0.55s ease;
+}
+
+.loader-exit {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Background glow */
+.loader-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 40%, rgba(99,102,241,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 35% at 50% 60%, rgba(56,189,248,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Neural network SVG */
+.loader-network {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.loader-network svg {
+  width: min(320px, 65vw);
+  height: auto;
+}
+
+/* Spinning dashed ring */
+.loader-spin-ring {
+  transform-origin: 160px 200px;
+  animation: loader-ring-spin 8s linear infinite;
+}
+
+@keyframes loader-ring-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Node animations */
+@keyframes pulse-ring-loader {
+  0%   { r: 8;  opacity: 0.5; }
+  50%  { r: 14; opacity: 0.15; }
+  100% { r: 8;  opacity: 0; }
+}
+
+@keyframes node-glow {
+  0%, 100% { fill: #6366f1; r: 4; filter: none; }
+  50%       { fill: #818cf8; r: 5.5; filter: drop-shadow(0 0 6px rgba(99,102,241,0.8)); }
+}
+
+/* Center content */
+.loader-center {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.loader-monogram {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #6366f1 0%, #818cf8 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  animation: loader-mono-in 0.6s ease forwards;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 24px rgba(99,102,241,0.4));
+}
+
+@keyframes loader-mono-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.loader-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #eef2ff;
+  letter-spacing: 0.04em;
+  animation: fade-up 0.6s 0.2s ease forwards;
+  opacity: 0;
+}
+
+.loader-role {
+  font-size: 0.72rem;
+  color: #6b7a9e;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  animation: fade-up 0.6s 0.35s ease forwards;
+  opacity: 0;
+  margin-bottom: 20px;
+}
+
+/* Progress bar */
+.loader-bar-wrap {
+  width: 180px;
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  animation: fade-up 0.5s 0.5s ease forwards;
+  opacity: 0;
+}
+
+.loader-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #818cf8, #38bdf8);
+  border-radius: 999px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(99,102,241,0.6);
+}
+
+.loader-percent {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  color: #6b7a9e;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin-top: 6px;
+  animation: fade-up 0.5s 0.55s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
