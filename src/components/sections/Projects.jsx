@@ -145,90 +145,92 @@ function ProjectItem({ project, index, isOpen, onToggle }) {
     : `project-item ${isReverse ? 'project-item--reverse' : ''}`;
 
   return (
-    <article className={`${className} reveal`} style={{ transitionDelay: `${index * 80}ms` }}>
+    <div className="reveal" style={{ transitionDelay: `${index * 80}ms` }}>
+      <article className={className}>
 
-      {/* Visual */}
-      <div className="project-item__visual" aria-hidden="true">
-        <div className="project-item__visual-inner">
-          {VisualComp && <VisualComp className="project-item__svg" />}
-        </div>
-        <span className="project-item__num" aria-hidden="true">{project.number}</span>
-        <span className="project-item__chip">{project.label}</span>
-      </div>
-
-      {/* Content */}
-      <div className="project-item__content">
-        <p className="project-item__type">Project {project.number}</p>
-        <h3 className="project-item__title">{project.title}</h3>
-        <p className="project-item__tagline">{project.tagline}</p>
-
-        {/* Tags */}
-        <div className="project-item__tags" aria-label="Technologies used">
-          {project.tags.map(tag => (
-            <span key={tag} className="tag">{tag}</span>
-          ))}
+        {/* Visual */}
+        <div className="project-item__visual" aria-hidden="true">
+          <div className="project-item__visual-inner">
+            {VisualComp && <VisualComp className="project-item__svg" />}
+          </div>
+          <span className="project-item__num" aria-hidden="true">{project.number}</span>
+          <span className="project-item__chip">{project.label}</span>
         </div>
 
-        {/* Links */}
-        <div className="project-item__links">
-          {project.links.live && (
-            <a
-              href={project.links.live}
-              target="_blank"
-              rel="noreferrer"
-              className="project-item__link project-item__link--primary"
-              aria-label={`View live demo of ${project.title}`}
-            >
-              Live Demo <ExternalIcon />
-            </a>
-          )}
-          {project.links.github && (
-            <a
-              href={project.links.github}
-              target="_blank"
-              rel="noreferrer"
-              className="project-item__link"
-              aria-label={`View ${project.title} on GitHub`}
-            >
-              <GitHubIcon /> GitHub
-            </a>
-          )}
+        {/* Content */}
+        <div className="project-item__content">
+          <p className="project-item__type">Project {project.number}</p>
+          <h3 className="project-item__title">{project.title}</h3>
+          <p className="project-item__tagline">{project.tagline}</p>
+
+          {/* Tags */}
+          <div className="project-item__tags" aria-label="Technologies used">
+            {project.tags.map(tag => (
+              <span key={tag} className="tag">{tag}</span>
+            ))}
+          </div>
+
+          {/* Links */}
+          <div className="project-item__links">
+            {project.links.live && (
+              <a
+                href={project.links.live}
+                target="_blank"
+                rel="noreferrer"
+                className="project-item__link project-item__link--primary"
+                aria-label={`View live demo of ${project.title}`}
+              >
+                Live Demo <ExternalIcon />
+              </a>
+            )}
+            {project.links.github && (
+              <a
+                href={project.links.github}
+                target="_blank"
+                rel="noreferrer"
+                className="project-item__link"
+                aria-label={`View ${project.title} on GitHub`}
+              >
+                <GitHubIcon /> GitHub
+              </a>
+            )}
+          </div>
+
+          {/* Toggle */}
+          <button
+            className={`project-item__toggle ${isOpen ? 'project-item__toggle--open' : ''}`}
+            onClick={onToggle}
+            aria-expanded={isOpen}
+            aria-controls={`case-${project.id}`}
+          >
+            {isOpen ? 'Hide Case Study' : 'Case Study'}
+            <ChevronIcon open={isOpen} />
+          </button>
         </div>
 
-        {/* Toggle */}
-        <button
-          className={`project-item__toggle ${isOpen ? 'project-item__toggle--open' : ''}`}
-          onClick={onToggle}
-          aria-expanded={isOpen}
-          aria-controls={`case-${project.id}`}
-        >
-          {isOpen ? 'Hide Case Study' : 'Case Study'}
-          <ChevronIcon open={isOpen} />
-        </button>
-      </div>
-
-      {/* Expandable case study — full width */}
-      {isOpen && (
-        <div
-          className="project-item__case project-item__case--open"
-          id={`case-${project.id}`}
-          role="region"
-          aria-label={`${project.title} case study`}
-        >
-          {[
-            { label: 'Problem',  text: project.caseStudy.problem },
-            { label: 'Approach', text: project.caseStudy.approach },
-            { label: 'Tech',     text: project.caseStudy.tech },
-            { label: 'Outcome',  text: project.caseStudy.outcome },
-          ].map(col => (
-            <div key={col.label}>
-              <span className="case-col__label">{col.label}</span>
-              <p className="case-col__text">{col.text}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </article>
+        {/* Expandable case study — full width */}
+        {isOpen && (
+          <div
+            className="project-item__case project-item__case--open"
+            id={`case-${project.id}`}
+            role="region"
+            aria-label={`${project.title} case study`}
+          >
+            {[
+              { label: 'Problem',  text: project.caseStudy.problem },
+              { label: 'Approach', text: project.caseStudy.approach },
+              { label: 'Tech',     text: project.caseStudy.tech },
+              { label: 'Outcome',  text: project.caseStudy.outcome },
+            ].map(col => (
+              <div key={col.label}>
+                <span className="case-col__label">{col.label}</span>
+                <p className="case-col__text">{col.text}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </article>
+    </div>
   );
 }
 
