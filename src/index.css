@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 11% 91%;
+    --foreground: 60 3% 8%;
+    --card: 40 11% 93%;
+    --card-foreground: 60 3% 8%;
+    --popover: 40 11% 93%;
+    --popover-foreground: 60 3% 8%;
+    --primary: 60 3% 8%;
+    --primary-foreground: 40 11% 95%;
+    --secondary: 40 8% 85%;
+    --secondary-foreground: 60 3% 8%;
+    --muted: 40 8% 86%;
+    --muted-foreground: 40 4% 40%;
+    --accent: 40 10% 86%;
+    --accent-foreground: 60 3% 8%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 40 6% 80%;
+    --input: 40 6% 80%;
+    --ring: 60 3% 8%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 60 3% 7%;
+    --foreground: 40 11% 95%;
+    --card: 60 3% 8%;
+    --card-foreground: 40 11% 95%;
+    --popover: 60 3% 8%;
+    --popover-foreground: 40 11% 95%;
+    --primary: 40 11% 95%;
+    --primary-foreground: 60 3% 8%;
+    --secondary: 60 2% 16%;
+    --secondary-foreground: 40 11% 95%;
+    --muted: 60 2% 16%;
+    --muted-foreground: 40 5% 65%;
+    --accent: 60 2% 16%;
+    --accent-foreground: 40 11% 95%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 40 11% 95%;
+    --border: 60 2% 20%;
+    --input: 60 2% 20%;
+    --ring: 40 11% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Cinematic custom cursor for precision pointer devices — suppresses native cursor everywhere */
+  @media (hover: hover) and (pointer: fine) {
+    html, body, *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
+}

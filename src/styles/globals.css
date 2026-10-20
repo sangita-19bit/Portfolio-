@@ -1,6 +1,0 @@
-/*
- * globals.css — Superseded by App.css (the new design system).
- * All design tokens and global styles are now in src/App.css,
- * which is imported directly by App.jsx.
- * This file is kept empty to avoid breaking the import in main.jsx.
- */
