@@ -96,7 +96,7 @@ const PROJECTS: ProjectItem[] = [
       "Structured product-information and catalog-management flows to support maintainable updates and clear user journeys",
     ],
     tags: ["React", "Next.js", "Tailwind CSS", "HTML/CSS", "Responsive UI"],
-    githubUrl: "https://github.com/sangita-19bit/Ecommerce-NextJS",
+    githubUrl: "https://github.com/sangita-19bit/Ecommerce-",
     liveUrl: "https://ecommerce-swan-botanicals-5cwd.vercel.app",
   },
 ]
