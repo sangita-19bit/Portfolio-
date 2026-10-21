@@ -447,7 +447,7 @@ function Card({
       className={cardClassName}
       style={{
         borderRadius: 20, // Inline style ensures Framer Motion corrects distortion during scale
-        zIndex: flying ? 20 : isFolder ? i + 1 : 1,
+        zIndex: isFolder ? i + 1 : flying ? 20 : 1,
       }}
       onLayoutAnimationStart={() => setFlying(true)}
       onLayoutAnimationComplete={() => setFlying(false)}
