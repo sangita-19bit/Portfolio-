@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { LayoutGroup, motion, AnimatePresence, useReducedMotion } from "framer-motion"
-import { X, Globe } from "lucide-react"
+import { X, Globe, ExternalLink } from "lucide-react"
 import { ArtCanvas, BACK_PATH, FRONT_PATH, ArtPreset } from "@/components/ui/glass-folder-cards"
 
 // DEV CONSTANT: Set to 5 to slow all durations and delays 5x for frame-by-frame verification
@@ -39,7 +39,7 @@ const PROJECTS: ProjectItem[] = [
     tone: "dark",
     art: "aurora",
     seed: 7,
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1000&q=80",
+    image: "/assets/projects/rentflow-dashboard.png",
     shortDescription:
       "Full-stack property rental ecosystem with role-based workflows for property listings, tenants, automated rent tracking, and administrative operations.",
     longDescription:
@@ -50,8 +50,8 @@ const PROJECTS: ProjectItem[] = [
       "Improved release readiness by verifying end-to-end user journeys and maintaining clear feature-flow documentation",
     ],
     tags: ["React", "Next.js", "Spring Boot", "REST APIs", "SQL"],
-    githubUrl: "https://github.com/sangita-19bit",
-    liveUrl: "https://github.com/sangita-19bit",
+    githubUrl: "https://github.com/sangita-19bit/Online-Property-Rental-Tenant-Management-Platform",
+    liveUrl: "https://online-property-rental-tenant-manag.vercel.app",
   },
   {
     id: "blinkexam",
@@ -62,7 +62,7 @@ const PROJECTS: ProjectItem[] = [
     tone: "dark",
     art: "ember",
     seed: 14,
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80",
+    image: "/assets/projects/blink-exam-dashboard.png",
     shortDescription:
       "High-reliability online examination platform supporting dynamic quiz creation, strict timed attempts, automated scoring algorithms, and candidate analytics.",
     longDescription:
@@ -73,8 +73,8 @@ const PROJECTS: ProjectItem[] = [
       "Performed root-cause debugging of failed frontend-backend interactions and documented operational fixes",
     ],
     tags: ["Next.js", "React", "Spring Boot", "MongoDB", "Testing"],
-    githubUrl: "https://github.com/sangita-19bit",
-    liveUrl: "https://github.com/sangita-19bit",
+    githubUrl: "https://github.com/sangita-19bit/Online-Examination-System",
+    liveUrl: "https://online-examination-system-ivory.vercel.app",
   },
   {
     id: "swan-botanics",
@@ -85,7 +85,7 @@ const PROJECTS: ProjectItem[] = [
     tone: "dark",
     art: "verdant",
     seed: 21,
-    image: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=1000&q=80",
+    image: "/assets/projects/swan-botanicals-dashboard.png",
     shortDescription:
       "Responsive e-commerce storefront celebrating natural living with curated catalog views, dynamic product filtering, streamlined cart flows, and cross-device usability.",
     longDescription:
@@ -96,8 +96,8 @@ const PROJECTS: ProjectItem[] = [
       "Structured product-information and catalog-management flows to support maintainable updates and clear user journeys",
     ],
     tags: ["React", "Next.js", "Tailwind CSS", "HTML/CSS", "Responsive UI"],
-    githubUrl: "https://github.com/sangita-19bit",
-    liveUrl: "https://github.com/sangita-19bit",
+    githubUrl: "https://github.com/sangita-19bit/Ecommerce-NextJS",
+    liveUrl: "https://ecommerce-swan-botanicals-5cwd.vercel.app",
   },
 ]
 
@@ -122,8 +122,8 @@ function FolderCardContent({ kind, project }: { kind: "visual" | "details" | "li
     return (
       <div className="relative w-full h-full flex flex-col justify-between overflow-hidden">
         {/* Subtle background image watermark */}
-        <div className="absolute inset-0 opacity-30 pointer-events-none">
-          <img src={project.image} alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 opacity-35 pointer-events-none">
+          <img src={project.image} alt="" className="w-full h-full object-cover object-top" />
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/70 to-transparent" />
         </div>
 
@@ -227,22 +227,28 @@ function DetailCardContent({
   if (kind === "visual") {
     return (
       <div className="relative w-full h-full flex flex-col justify-between">
-        {/* Inner Framed Visual Image */}
-        <div className="relative w-full h-full rounded-xl overflow-hidden border border-white/15 bg-neutral-900 flex flex-col justify-between">
+        {/* Inner Framed Visual Image Link */}
+        <a
+          href={project.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${project.title} live demo`}
+          className="relative w-full h-full rounded-xl overflow-hidden border border-white/15 bg-neutral-900 flex flex-col justify-between group/preview block cursor-pointer"
+        >
           <img
             src={project.image}
             alt={project.title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover/preview:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/20 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/95 via-neutral-950/25 to-transparent pointer-events-none" />
 
           {/* Top Floating Badge */}
           <div className="relative z-10 m-2.5 flex items-center justify-between">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-[9.5px] font-mono text-emerald-400">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-[9.5px] font-mono text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Visual Preview</span>
+              <span>Live Dashboard</span>
             </div>
-            <span className="text-[9.5px] font-mono text-white/80 bg-black/50 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/15">
+            <span className="text-[9.5px] font-mono text-white/80 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/15">
               {project.timeline}
             </span>
           </div>
@@ -253,11 +259,12 @@ function DetailCardContent({
               <div className="text-sm font-serif text-white font-light tracking-wide">{project.title}</div>
               <div className="text-[10px] font-mono text-neutral-400">{project.category}</div>
             </div>
-            <span className="text-[9px] font-mono text-emerald-400/90 border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-              Live Project
+            <span className="inline-flex items-center gap-1 text-[9px] font-mono text-emerald-400 border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 rounded-full group-hover/preview:bg-emerald-500/25 group-hover/preview:border-emerald-400 transition-colors shadow-[0_0_12px_rgba(16,185,129,0.2)]">
+              <span>Open Live</span>
+              <ExternalLink className="w-2.5 h-2.5" />
             </span>
           </div>
-        </div>
+        </a>
       </div>
     )
   }
@@ -295,16 +302,45 @@ function DetailCardContent({
           ))}
         </div>
 
-        {/* Tech Stack Pills */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-white/10">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-neutral-300 hover:border-white/25 hover:text-white transition-colors"
+        {/* Tech Stack Pills & Direct Interactive Action CTAs */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/10">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {project.tags.map((tag) => (
+              <span
+                key={tag}
+                className="text-[9.5px] font-mono px-2 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-neutral-300 hover:border-white/25 hover:text-white transition-colors"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Action CTAs embedded inside Details Card */}
+          <div className="flex items-center gap-2">
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${project.title} live demo`}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/25 hover:border-emerald-400 hover:text-white text-xs font-mono transition-all duration-200 shadow-[0_0_15px_rgba(16,185,129,0.25)] hover:scale-105 active:scale-95 cursor-pointer"
             >
-              {tag}
-            </span>
-          ))}
+              <Globe className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Live Demo</span>
+              <ExternalLink className="w-3 h-3 opacity-70" />
+            </a>
+
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${project.title} GitHub repository`}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/15 text-neutral-300 hover:bg-white/15 hover:border-white/30 hover:text-white text-xs font-mono transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <GitHubIcon className="w-3.5 h-3.5" />
+              <span>GitHub Repo</span>
+              <ExternalLink className="w-3 h-3 opacity-70" />
+            </a>
+          </div>
         </div>
       </div>
     )
