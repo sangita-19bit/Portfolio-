@@ -163,7 +163,7 @@ export default function SkillsSection() {
                 scale={1.03}
                 perspective={1000}
                 effect="gravitate"
-                spotlight={true}
+                spotlight={false}
                 tabIndex={0}
                 role="region"
                 aria-label={group.category}
