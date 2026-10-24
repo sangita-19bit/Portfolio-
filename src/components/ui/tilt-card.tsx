@@ -52,7 +52,7 @@ export function TiltCard({
       const xRot = (py - 0.5) * (tiltLimit * 2) * dir
       const yRot = (px - 0.5) * -(tiltLimit * 2) * dir
       setTransform(
-        `perspective(${perspective}px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale3d(${scale}, ${scale}, ${scale})`
+        `perspective(${perspective}px) translateZ(-6px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale3d(${scale}, ${scale}, ${scale})`
       )
       if (spotlight) {
         setSpotlightPos({ x: px * 100, y: py * 100 })
@@ -67,7 +67,7 @@ export function TiltCard({
 
   const handlePointerLeave = useCallback(() => {
     setTransform(
-      `perspective(${perspective}px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`
+      `perspective(${perspective}px) translateZ(0px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`
     )
     setIsHovered(false)
   }, [perspective])

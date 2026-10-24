@@ -160,10 +160,10 @@ export default function SkillsSection() {
             >
               <TiltCard
                 tiltLimit={14}
-                scale={1.03}
+                scale={0.985}
                 perspective={1000}
-                effect="gravitate"
-                spotlight={false}
+                effect="evade"
+                spotlight={true}
                 tabIndex={0}
                 role="region"
                 aria-label={group.category}
@@ -219,24 +219,40 @@ export default function SkillsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-8 rounded-2xl border border-white/10 bg-neutral-950/60 backdrop-blur-xl p-5"
+          className="mt-8"
         >
-          <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3.5">
-            <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-semibold">
-              Operational Attributes & Core Strengths
-            </span>
-            <span className="text-[10px] font-mono text-neutral-500">Work Ethic & Culture</span>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {CORE_STRENGTHS.map((strength) => (
-              <span
-                key={strength}
-                className="text-[11px] font-mono px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300"
-              >
-                ✦ {strength}
-              </span>
-            ))}
-          </div>
+          <TiltCard
+            tiltLimit={6}
+            scale={0.99}
+            perspective={1000}
+            effect="evade"
+            spotlight={true}
+            tabIndex={0}
+            role="region"
+            aria-label="Operational Attributes & Core Strengths"
+            className="skill-card rounded-2xl p-5 sm:p-6 group cursor-pointer"
+          >
+            <div className="relative z-20 flex flex-col justify-between h-full [transform-style:preserve-3d]">
+              <div className="flex items-center justify-between pb-3 border-b border-[var(--card-divider)] mb-3.5 [transform:translateZ(20px)]">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-700 font-semibold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  Operational Attributes & Core Strengths
+                </span>
+                <span className="text-[10px] font-mono text-[var(--card-text-muted)]">Work Ethic & Culture</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 [transform:translateZ(14px)]">
+                {CORE_STRENGTHS.map((strength) => (
+                  <span
+                    key={strength}
+                    className="chip text-[11px] font-mono px-3 py-1.5 rounded-full transition-transform hover:scale-[1.03] flex items-center gap-1.5 cursor-default"
+                  >
+                    <span className="text-emerald-400 text-xs">✦</span>
+                    <span>{strength}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </TiltCard>
         </motion.div>
       </div>
       </KineticGrid>
