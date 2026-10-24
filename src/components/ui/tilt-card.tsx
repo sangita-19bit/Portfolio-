@@ -3,7 +3,7 @@
 import { useRef, useState, useCallback } from "react"
 import { cn } from "@/lib/utils"
 
-export interface TiltCardProps {
+export interface TiltCardProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Maximum tilt angle in degrees */
   tiltLimit?: number
   /** Scale factor on hover */
@@ -31,6 +31,7 @@ export function TiltCard({
   className,
   style,
   children,
+  ...props
 }: TiltCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [transform, setTransform] = useState(
@@ -84,11 +85,12 @@ export function TiltCard({
         transformStyle: "preserve-3d",
         ...style,
       }}
+      {...props}
     >
       {children}
       {spotlight && (
         <div
-          className="pointer-events-none absolute inset-0 z-10 overflow-hidden"
+          className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-[inherit]"
           style={{ opacity: isHovered ? 1 : 0, transition: "opacity 0.3s" }}
         >
           <div
@@ -98,7 +100,7 @@ export function TiltCard({
               top: `${spotlightPos.y}%`,
               transform: "translate(-50%, -50%)",
               background:
-                "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 40%)",
+                "radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 40%)",
             }}
           />
         </div>

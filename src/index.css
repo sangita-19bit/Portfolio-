@@ -24,6 +24,21 @@
     --input: 40 6% 80%;
     --ring: 60 3% 8%;
     --radius: 0.75rem;
+
+    /* Technical Capabilities: Skill Card Design Tokens */
+    --card-face-top:          #d3d6db;
+    --card-face-bottom:       #aeb3bb;
+    --card-face-hover-top:    #e2e5e9;
+    --card-face-hover-bottom: #bfc4cb;
+    --card-edge-light:        rgba(255, 255, 255, 0.65); /* top/left bevel */
+    --card-edge-dark:         rgba(0, 0, 0, 0.35);       /* bottom/right bevel */
+    --card-text:              #14161a;
+    --card-text-muted:        #3b3f46;
+    --card-accent:            #2f5bea;                   /* tags, icons, active state */
+    --card-chip-bg:           rgba(20, 22, 26, 0.92);
+    --card-chip-text:         #e8eaee;
+    --card-chip-border:       rgba(0, 0, 0, 0.25);
+    --card-divider:           rgba(20, 22, 26, 0.12);
   }
 
   .dark {
@@ -63,5 +78,97 @@
     html, body, *, *::before, *::after {
       cursor: none !important;
     }
+  }
+}
+
+/* ==========================================================================
+   Technical Capabilities: Skill Card Component Styles
+   ========================================================================== */
+
+.skill-card {
+  background: linear-gradient(145deg, var(--card-face-top), var(--card-face-bottom));
+  color: var(--card-text);
+  border: 1px solid var(--card-edge-light);
+  border-bottom-color: var(--card-edge-dark);
+  border-right-color: var(--card-edge-dark);
+  border-radius: 16px;
+
+  /* Layered shadows create depth against the dark mesh */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.18),
+    0 2px 4px rgba(0, 0, 0, 0.45),
+    0 14px 28px rgba(0, 0, 0, 0.55),
+    0 30px 60px rgba(0, 0, 0, 0.45);
+
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(.2, .8, .2, 1),
+              box-shadow 0.35s ease,
+              background 0.35s ease;
+  will-change: transform;
+}
+
+.skill-card:hover,
+.skill-card:focus-visible {
+  background: linear-gradient(145deg, var(--card-face-hover-top), var(--card-face-hover-bottom));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.15),
+    0 6px 10px rgba(0, 0, 0, 0.5),
+    0 26px 50px rgba(0, 0, 0, 0.6),
+    0 50px 90px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.25),            /* rim light */
+    0 0 40px rgba(180, 190, 210, 0.18);             /* soft glow on the dark mesh */
+}
+
+/* Keyboard focus accessible treatment */
+.skill-card:focus-visible {
+  outline: 2px solid var(--card-accent);
+  outline-offset: 3px;
+  transform: translateY(-8px) rotateX(4deg) rotateY(-4deg) scale(1.02) !important;
+}
+
+/* Content: lifted off the card face for parallax depth */
+.skill-card h3 {
+  color: var(--card-text);
+  transform: translateZ(30px);
+}
+
+.skill-card p,
+.skill-card li,
+.skill-card .skill-card-muted {
+  color: var(--card-text-muted);
+  transform: translateZ(20px);
+}
+
+.skill-card .tag,
+.skill-card .chip {
+  background: var(--card-chip-bg);
+  color: var(--card-chip-text);
+  border: 1px solid var(--card-chip-border);
+}
+
+.skill-card .icon-box {
+  background: rgba(20, 22, 26, 0.08);
+  border: 1px solid rgba(20, 22, 26, 0.12);
+  transform: translateZ(35px);
+}
+
+.skill-card svg,
+.skill-card .icon {
+  color: var(--card-accent);
+  transform: translateZ(40px);
+}
+
+.skill-card .skill-card-divider {
+  border-top: 1px solid var(--card-divider);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-card,
+  .skill-card:hover,
+  .skill-card:focus-visible {
+    transition: none !important;
+    transform: none !important;
   }
 }

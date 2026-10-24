@@ -12,7 +12,6 @@ import {
 } from "lucide-react"
 import { TiltCard } from "@/components/ui/tilt-card"
 import KineticGrid from "@/components/ui/kinetic-grid"
-import { cn } from "@/lib/utils"
 
 interface SkillGroup {
   category: string
@@ -165,44 +164,44 @@ export default function SkillsSection() {
                 perspective={1000}
                 effect="gravitate"
                 spotlight={true}
-                className="h-full rounded-2xl border border-white/10 bg-neutral-950/80 backdrop-blur-xl p-6 flex flex-col justify-between hover:border-zinc-400/40 transition-colors duration-300 shadow-xl group cursor-pointer"
+                tabIndex={0}
+                role="region"
+                aria-label={group.category}
+                className="skill-card h-full p-6 flex flex-col justify-between group cursor-pointer"
               >
                 <div className="relative z-20 flex flex-col justify-between h-full [transform-style:preserve-3d]">
                   {/* Top Metadata & Heading with 3D Depth */}
                   <div className="[transform:translateZ(24px)]">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-semibold px-2 py-0.5 rounded-md bg-white/5 border border-white/10">
+                        <span className="chip text-[11px] font-mono uppercase tracking-wider font-semibold px-2 py-0.5 rounded-md">
                           0{idx + 1}
                         </span>
-                        <span className="text-[10px] font-mono text-neutral-400">
+                        <span className="skill-card-muted text-[10px] font-mono">
                           {group.tag}
                         </span>
                       </div>
                       <div
-                        className={cn(
-                          "p-2 rounded-xl border flex items-center justify-center transition-transform duration-300 group-hover:scale-110",
-                          group.iconBg
-                        )}
+                        className="icon-box p-2 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
                       >
-                        <group.icon className={cn("w-4 h-4", group.iconColor)} />
+                        <group.icon className="icon w-4 h-4" />
                       </div>
                     </div>
 
-                    <h3 className="text-base sm:text-lg font-serif font-light text-white tracking-tight group-hover:text-white transition-colors">
+                    <h3 className="text-base sm:text-lg font-serif font-light tracking-tight transition-colors">
                       {group.category}
                     </h3>
-                    <p className="text-[11px] font-mono text-neutral-400 mt-0.5 mb-5">
+                    <p className="text-[11px] font-mono mt-0.5 mb-5">
                       {group.subtitle}
                     </p>
                   </div>
 
                   {/* Skills Pill Chips with subtle 3D Elevation */}
-                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/10 [transform:translateZ(14px)]">
+                  <div className="skill-card-divider flex flex-wrap gap-1.5 pt-4 [transform:translateZ(14px)]">
                     {group.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="text-[10px] sm:text-[10.5px] font-mono px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300 group-hover:border-white/20 group-hover:text-white transition-colors"
+                        className="chip text-[10px] sm:text-[10.5px] font-mono px-2.5 py-1 rounded-full transition-colors"
                       >
                         {skill}
                       </span>
