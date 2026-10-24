@@ -1,18 +1,35 @@
 "use client"
 
+import { useRef } from "react"
 import { motion } from "framer-motion"
+import {
+  ShieldCheck,
+  LifeBuoy,
+  Code2,
+  Layout,
+  Server,
+  GitBranch,
+  type LucideIcon,
+} from "lucide-react"
+import { TiltCard } from "@/components/ui/tilt-card"
+import BackgroundRadialBlackViolet from "@/components/ui/background-radial-black-violet"
+import { cn } from "@/lib/utils"
 
 interface SkillGroup {
   category: string
   subtitle: string
+  tag: string
   skills: string[]
-  accent: string
+  icon: LucideIcon
+  iconColor: string
+  iconBg: string
 }
 
 const SKILL_GROUPS: SkillGroup[] = [
   {
     category: "Testing & Product Quality",
     subtitle: "Validation & Defect Analysis",
+    tag: "QA & Verification",
     skills: [
       "Functional Testing",
       "Regression Testing",
@@ -23,11 +40,14 @@ const SKILL_GROUPS: SkillGroup[] = [
       "Root Cause Analysis",
       "Release Readiness",
     ],
-    accent: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10",
+    icon: ShieldCheck,
+    iconColor: "text-emerald-400",
+    iconBg: "border-emerald-500/20 bg-emerald-500/10",
   },
   {
     category: "Support & Documentation",
     subtitle: "Troubleshooting & Communication",
+    tag: "Ops & Workflows",
     skills: [
       "Technical Troubleshooting",
       "Issue Reproduction",
@@ -35,29 +55,41 @@ const SKILL_GROUPS: SkillGroup[] = [
       "User-Flow Documentation",
       "Stakeholder Communication",
     ],
-    accent: "text-blue-400 border-blue-500/30 bg-blue-500/10",
+    icon: LifeBuoy,
+    iconColor: "text-zinc-300",
+    iconBg: "border-zinc-500/20 bg-zinc-500/10",
   },
   {
     category: "Languages & Data",
     subtitle: "Core Programming & Queries",
+    tag: "Syntax & Logic",
     skills: ["Python", "SQL", "Java", "C", "C++", "JavaScript", "HTML", "CSS"],
-    accent: "text-amber-400 border-amber-500/30 bg-amber-500/10",
+    icon: Code2,
+    iconColor: "text-amber-400",
+    iconBg: "border-amber-500/20 bg-amber-500/10",
   },
   {
     category: "Frontend Engineering",
     subtitle: "Modern Component Architecture",
+    tag: "UI & State",
     skills: ["React.js", "Next.js", "Tailwind CSS", "Responsive Web Design"],
-    accent: "text-cyan-400 border-cyan-500/30 bg-cyan-500/10",
+    icon: Layout,
+    iconColor: "text-zinc-200",
+    iconBg: "border-zinc-400/20 bg-zinc-400/10",
   },
   {
     category: "Backend & Databases",
     subtitle: "API Services & Data Stores",
+    tag: "Server & Schemas",
     skills: ["Spring Boot", "REST APIs", "MongoDB", "SQL", "Data Modeling Basics"],
-    accent: "text-violet-400 border-violet-500/30 bg-violet-500/10",
+    icon: Server,
+    iconColor: "text-zinc-300",
+    iconBg: "border-zinc-500/20 bg-zinc-500/10",
   },
   {
     category: "Core CS & Tools",
     subtitle: "Foundations & Development Stack",
+    tag: "Systems & Versioning",
     skills: [
       "Data Structures & Algorithms",
       "OOP",
@@ -67,7 +99,9 @@ const SKILL_GROUPS: SkillGroup[] = [
       "VS Code",
       "Command Line Basics",
     ],
-    accent: "text-rose-400 border-rose-500/30 bg-rose-500/10",
+    icon: GitBranch,
+    iconColor: "text-rose-400",
+    iconBg: "border-rose-500/20 bg-rose-500/10",
   },
 ]
 
@@ -82,10 +116,22 @@ const CORE_STRENGTHS = [
 ]
 
 export default function SkillsSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+
   return (
-    <section id="skills" className="relative w-full py-20 px-4 sm:px-6 lg:px-8 bg-black text-white overflow-hidden border-t border-white/10">
-      {/* Background Ambient Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent blur-3xl pointer-events-none" />
+    <section
+      ref={sectionRef}
+      id="skills"
+      className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white overflow-hidden border-t border-white/10"
+    >
+      {/* 21st.dev / ibelick Background Radial Dark Gray + Interactive Real-time Cursor Path Tracing */}
+      <BackgroundRadialBlackViolet
+        variant="gray"
+        enableCursorTrail={true}
+        trailDuration={1600}
+        strokeWidth={2.5}
+        containerRef={sectionRef}
+      />
 
       <div className="relative z-10 max-w-5xl mx-auto">
         {/* Top Header / Meta Navbar */}
@@ -94,7 +140,7 @@ export default function SkillsSection() {
             Technical Capabilities
           </span>
           <span className="text-xs sm:text-[13px] font-mono tracking-wider text-neutral-400">
-            06 Domains · Verified Competencies
+            06 Domains · Interactive Tracing Canvas
           </span>
         </div>
 
@@ -109,8 +155,8 @@ export default function SkillsSection() {
           </p>
         </div>
 
-        {/* Skills Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        {/* 3D Tilt Skills Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {SKILL_GROUPS.map((group, idx) => (
             <motion.div
               key={group.category}
@@ -118,35 +164,59 @@ export default function SkillsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
-              className="rounded-2xl border border-white/10 bg-neutral-950/70 backdrop-blur-xl p-5 flex flex-col justify-between hover:border-white/20 transition-all duration-300 shadow-lg group"
+              className="h-full"
             >
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-semibold">
-                    0{idx + 1}
-                  </span>
-                  <span className="text-[9.5px] font-mono text-neutral-500">
-                    {group.skills.length} skills
-                  </span>
-                </div>
-                <h3 className="text-base font-serif font-light text-white tracking-tight">
-                  {group.category}
-                </h3>
-                <p className="text-[11px] font-mono text-neutral-400 mt-0.5 mb-4">
-                  {group.subtitle}
-                </p>
-              </div>
+              <TiltCard
+                tiltLimit={14}
+                scale={1.03}
+                perspective={1000}
+                effect="gravitate"
+                spotlight={true}
+                className="h-full rounded-2xl border border-white/10 bg-neutral-950/80 backdrop-blur-xl p-6 flex flex-col justify-between hover:border-zinc-400/40 transition-colors duration-300 shadow-xl group cursor-pointer"
+              >
+                <div className="relative z-20 flex flex-col justify-between h-full [transform-style:preserve-3d]">
+                  {/* Top Metadata & Heading with 3D Depth */}
+                  <div className="[transform:translateZ(24px)]">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-mono uppercase tracking-wider text-neutral-400 font-semibold px-2 py-0.5 rounded-md bg-white/5 border border-white/10">
+                          0{idx + 1}
+                        </span>
+                        <span className="text-[10px] font-mono text-neutral-400">
+                          {group.tag}
+                        </span>
+                      </div>
+                      <div
+                        className={cn(
+                          "p-2 rounded-xl border flex items-center justify-center transition-transform duration-300 group-hover:scale-110",
+                          group.iconBg
+                        )}
+                      >
+                        <group.icon className={cn("w-4 h-4", group.iconColor)} />
+                      </div>
+                    </div>
 
-              <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
-                {group.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 group-hover:border-white/20 group-hover:text-white transition-colors"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
+                    <h3 className="text-base sm:text-lg font-serif font-light text-white tracking-tight group-hover:text-white transition-colors">
+                      {group.category}
+                    </h3>
+                    <p className="text-[11px] font-mono text-neutral-400 mt-0.5 mb-5">
+                      {group.subtitle}
+                    </p>
+                  </div>
+
+                  {/* Skills Pill Chips with subtle 3D Elevation */}
+                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-white/10 [transform:translateZ(14px)]">
+                    {group.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="text-[10px] sm:text-[10.5px] font-mono px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-neutral-300 group-hover:border-white/20 group-hover:text-white transition-colors"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </TiltCard>
             </motion.div>
           ))}
         </div>
@@ -157,7 +227,7 @@ export default function SkillsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-8 rounded-2xl border border-white/10 bg-neutral-950/50 backdrop-blur-xl p-5"
+          className="mt-8 rounded-2xl border border-white/10 bg-neutral-950/60 backdrop-blur-xl p-5"
         >
           <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3.5">
             <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-semibold">
