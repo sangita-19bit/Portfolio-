@@ -1,6 +1,5 @@
 "use client"
 
-import { useRef } from "react"
 import { motion } from "framer-motion"
 import {
   ShieldCheck,
@@ -12,7 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react"
 import { TiltCard } from "@/components/ui/tilt-card"
-import BackgroundRadialBlackViolet from "@/components/ui/background-radial-black-violet"
+import KineticGrid from "@/components/ui/kinetic-grid"
 import { cn } from "@/lib/utils"
 
 interface SkillGroup {
@@ -116,33 +115,27 @@ const CORE_STRENGTHS = [
 ]
 
 export default function SkillsSection() {
-  const sectionRef = useRef<HTMLElement>(null)
-
   return (
     <section
-      ref={sectionRef}
       id="skills"
-      className="relative w-full py-20 px-4 sm:px-6 lg:px-8 text-white overflow-hidden border-t border-white/10"
+      className="relative w-full text-white overflow-hidden border-t border-white/10"
     >
-      {/* 21st.dev / ibelick Background Radial Dark Gray + Interactive Real-time Cursor Path Tracing */}
-      <BackgroundRadialBlackViolet
-        variant="gray"
-        enableCursorTrail={true}
-        trailDuration={1600}
-        strokeWidth={2.5}
-        containerRef={sectionRef}
-      />
-
-      <div className="relative z-10 max-w-5xl mx-auto">
-        {/* Top Header / Meta Navbar */}
-        <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-10">
-          <span className="text-xs sm:text-[13px] font-mono tracking-wider text-neutral-300 font-medium uppercase">
-            Technical Capabilities
-          </span>
-          <span className="text-xs sm:text-[13px] font-mono tracking-wider text-neutral-400">
-            06 Domains · Interactive Tracing Canvas
-          </span>
-        </div>
+      {/* 21st.dev Kinetic Grid Interactive Background */}
+      <KineticGrid
+        globalColor="monochrome"
+        bgPosition="absolute"
+        className="py-20 px-4 sm:px-6 lg:px-8 min-h-0"
+      >
+        <div className="relative z-10 max-w-5xl mx-auto">
+          {/* Top Header / Meta Navbar */}
+          <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-10">
+            <span className="text-xs sm:text-[13px] font-mono tracking-wider text-neutral-300 font-medium uppercase">
+              Technical Capabilities
+            </span>
+            <span className="text-xs sm:text-[13px] font-mono tracking-wider text-neutral-400">
+              06 Domains · Interactive Kinetic Grid
+            </span>
+          </div>
 
         {/* Section Intro */}
         <div className="max-w-2xl mb-12">
@@ -247,6 +240,7 @@ export default function SkillsSection() {
           </div>
         </motion.div>
       </div>
+      </KineticGrid>
     </section>
   )
 }
