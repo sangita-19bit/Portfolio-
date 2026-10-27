@@ -1,0 +1,218 @@
+/* ═══════════════════════════════════════════════════════════
+   EDUCATION — Premium editorial timeline
+   ═══════════════════════════════════════════════════════════ */
+
+.education-section {
+  background: transparent;
+}
+
+.edu__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-top: 72px;
+}
+
+/* ── Column titles ────────────────────────────────────────── */
+.edu__col-title {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.edu__col-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── Education timeline ───────────────────────────────────── */
+.edu__entries {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.edu__entry {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 24px;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.edu__entry:first-child {
+  padding-top: 0;
+}
+
+/* Period — vertical */
+.edu__entry-period {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  padding-top: 4px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.edu__entry-degree {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  color: var(--text-ivory);
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.edu__entry-inst {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  letter-spacing: 0.01em;
+}
+
+.edu__entry-score {
+  font-family: var(--font-serif);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.edu__entry-desc {
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+
+/* ── Right column — achievements + profiles ───────────────── */
+
+/* Achievement items */
+.ach-item {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.ach-item:first-child { padding-top: 0; }
+
+.ach-item__title {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-ivory);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.ach-item__desc {
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--text-dim);
+}
+
+.ach-item__badge {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.ach-item__badge--cert {
+  color: var(--gold);
+  border-color: var(--gold-line);
+}
+
+.ach-item__badge--hackathon {
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+/* ── Profiles section ─────────────────────────────────────── */
+.edu__profiles-section {
+  margin-top: 48px;
+}
+
+.profile-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  transition: color var(--dur-fast);
+  text-decoration: none;
+}
+
+.profile-link:first-of-type { border-top: 1px solid var(--border); }
+
+.profile-link:hover { color: var(--text-ivory); }
+
+.profile-link__left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.profile-link__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-ivory);
+  letter-spacing: 0.01em;
+  transition: color var(--dur-fast);
+}
+
+.profile-link:hover .profile-link__label { color: var(--gold); }
+
+.profile-link__handle {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+}
+
+.profile-link__arrow {
+  font-size: 0.875rem;
+  color: var(--text-dim);
+  transition: color var(--dur-fast), transform var(--dur-fast);
+}
+
+.profile-link:hover .profile-link__arrow {
+  color: var(--gold);
+  transform: translateX(4px);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .edu__grid {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  .edu__entry {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .edu__entry-period {
+    text-align: left;
+  }
+}
