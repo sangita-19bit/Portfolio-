@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, lazy, Suspense } from "react"
 import { motion } from "framer-motion"
 import {
   GraduationCap,
@@ -12,10 +13,17 @@ import {
   Calendar,
   BookOpen,
   Terminal,
+  Compass,
+  Layers,
+  Loader2,
 } from "lucide-react"
 import { Timeline, type TimelineEntry } from "@/components/ui/timeline"
 
+// Lazy-load 3D Hill Climb game engine to keep initial page bundle ultra-fast
+const HillClimbExperience = lazy(() => import("./hill-climb/HillClimbExperience"))
+
 export default function EducationSection() {
+  const [viewMode, setViewMode] = useState<"3d" | "timeline">("3d")
   const timelineData: TimelineEntry[] = [
     // Milestone 1: 2021 (School Foundations - Secondary Education)
     {
@@ -592,32 +600,94 @@ export default function EducationSection() {
   return (
     <section
       id="education"
-      className="relative w-full bg-black text-white overflow-hidden border-t border-white/10 dark"
+      className="relative w-full bg-[#EBE9E5] text-[#151514] overflow-hidden border-t border-neutral-300"
     >
       {/* Subtle Ambient Background Light */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-emerald-500/5 via-cyan-500/5 to-transparent blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-emerald-500/10 via-cyan-500/5 to-transparent blur-3xl pointer-events-none" />
 
       {/* Top Header / Meta Navbar inside section container */}
       <div className="max-w-7xl mx-auto pt-20 px-4 md:px-8 lg:px-10">
-        <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
-          <span className="text-xs sm:text-[13px] font-mono tracking-wider text-neutral-300 font-medium uppercase">
-            Education & Certifications
-          </span>
-          <span className="text-xs sm:text-[13px] font-mono tracking-wider text-neutral-400">
-            Academic Track · Verified Credentials
-          </span>
-        </div>
-      </div>
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-neutral-300/80 mb-6">
+          <div className="flex items-center gap-3">
+            <span className="text-xs sm:text-[13px] font-mono tracking-wider text-neutral-600 font-medium uppercase">
+              Education & Certifications
+            </span>
+            <span className="text-[11px] font-mono text-emerald-700 bg-emerald-500/15 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+              ✦ 3D Interactive
+            </span>
+          </div>
 
-      {/* Aceternity Animated Milestones Timeline */}
-      <Timeline
-        data={timelineData}
-        eyebrow="Milestones & Timeline"
-        title="From school foundations to computer science engineering."
-        description="A chronological progression documenting secondary schooling, higher secondary pure sciences, engineering inception at Chandigarh University, and continuous industry certifications."
-        className="bg-transparent dark:bg-transparent"
-        beamGradient="bg-gradient-to-t from-emerald-400 via-cyan-400 to-transparent from-[0%] via-[12%] rounded-full shadow-[0_0_12px_rgba(52,211,153,0.8)]"
-      />
+          {/* Mode Switcher Pill */}
+          <div className="flex items-center p-1 rounded-xl bg-white/80 border border-neutral-300 text-xs font-mono shadow-sm">
+            <button
+              type="button"
+              onClick={() => setViewMode("3d")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+                viewMode === "3d"
+                  ? "bg-emerald-500/20 text-emerald-800 border border-emerald-500/30 font-semibold shadow-sm"
+                  : "text-neutral-500 hover:text-black"
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>3D Hill Climb</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("timeline")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
+                viewMode === "timeline"
+                  ? "bg-emerald-500/20 text-emerald-800 border border-emerald-500/30 font-semibold shadow-sm"
+                  : "text-neutral-500 hover:text-black"
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Full Timeline</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Section Intro Headline */}
+        <div className="mb-8">
+          <p className="text-xs font-mono uppercase tracking-widest text-emerald-700 font-semibold mb-2">
+            Milestones & Progression
+          </p>
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-zinc-900 tracking-tight">
+            From school foundations to computer science engineering.
+          </h3>
+          <p className="text-sm text-neutral-600 max-w-3xl mt-2 leading-relaxed font-sans">
+            Drive along the 3D hilly terrain to explore milestones, academic qualifications, and technical certifications.
+            Use <kbd className="px-1.5 py-0.5 rounded bg-white border border-neutral-300 text-neutral-800 font-mono text-xs shadow-xs">D / →</kbd> to accelerate and <kbd className="px-1.5 py-0.5 rounded bg-white border border-neutral-300 text-neutral-800 font-mono text-xs shadow-xs">A / ←</kbd> to brake.
+          </p>
+        </div>
+
+        {/* Dynamic Display Mode */}
+        {viewMode === "3d" ? (
+          <div className="pb-20">
+            <Suspense
+              fallback={
+                <div className="w-full h-[540px] sm:h-[640px] lg:h-[700px] flex flex-col items-center justify-center bg-white/70 rounded-3xl border border-neutral-300 font-mono text-neutral-600 gap-3">
+                  <Loader2 className="w-7 h-7 text-emerald-600 animate-spin" />
+                  <span className="text-sm">Initializing 3D Hill Climb Engine...</span>
+                </div>
+              }
+            >
+              <HillClimbExperience onSwitchToTimeline={() => setViewMode("timeline")} />
+            </Suspense>
+          </div>
+        ) : (
+          <div className="pb-10">
+            {/* Aceternity Animated Milestones Timeline */}
+            <Timeline
+              data={timelineData}
+              eyebrow="Milestones & Timeline"
+              title="Academic Archive & Complete Credentials"
+              description="A chronological progression documenting secondary schooling, higher secondary pure sciences, engineering inception at Chandigarh University, and continuous industry certifications."
+              className="bg-transparent dark:bg-transparent"
+              beamGradient="bg-gradient-to-t from-emerald-500 via-cyan-500 to-transparent from-[0%] via-[12%] rounded-full shadow-[0_0_12px_rgba(16,185,129,0.7)]"
+            />
+          </div>
+        )}
+      </div>
     </section>
   )
 }
