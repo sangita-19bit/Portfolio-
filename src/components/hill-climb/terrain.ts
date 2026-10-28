@@ -201,13 +201,20 @@ export function createTerrain(): {
   const rockTransforms: THREE.Matrix4[] = []
   const dummy = new THREE.Object3D()
 
-  for (let x = -8; x < length + 18; x += 5.5) {
-    // Left side prop
-    const sideOffsetL = -width / 2 - 2.2 - ((x * 13) % 7)
-    const yL = getRoadHeight(x) - 0.2
-    const scaleL = 0.75 + ((x * 19) % 5) * 0.12
+  for (let x = -15; x <= length + 20; x += 6.0) {
+    // Keep clear zones around Start Arch (x < 14) and Finish Arch (|x - length| < 14)
+    // to prevent any props from obstructing the gates or spawning on the road
+    if (x < 14 || Math.abs(x - length) < 14) {
+      continue
+    }
 
-    if ((x * 7) % 3 > 0.8) {
+    // Left side prop: strictly positive pseudo-random offset (always off road shoulder)
+    const randL = Math.abs(Math.sin(x * 12.9898)) * 4.5
+    const sideOffsetL = -width / 2 - 2.4 - randL // Strictly <= -5.15
+    const yL = getRoadHeight(x) - 0.2
+    const scaleL = 0.75 + Math.abs(Math.sin(x * 43.123)) * 0.45
+
+    if (Math.abs(Math.sin(x * 7.123)) > 0.35) {
       dummy.position.set(x, yL, sideOffsetL)
       dummy.rotation.set(0, (x * 0.5) % Math.PI, 0)
       dummy.scale.set(scaleL, scaleL, scaleL)
@@ -221,17 +228,24 @@ export function createTerrain(): {
       rockTransforms.push(dummy.matrix.clone())
     }
 
-    // Right side prop
-    const sideOffsetR = width / 2 + 2.4 + ((x * 17) % 8)
+    // Right side prop: strictly positive pseudo-random offset (always off road shoulder)
+    const randR = Math.abs(Math.cos(x * 78.233)) * 4.5
+    const sideOffsetR = width / 2 + 2.4 + randR // Strictly >= +5.15
     const yR = getRoadHeight(x) - 0.2
-    const scaleR = 0.8 + ((x * 23) % 4) * 0.1
+    const scaleR = 0.75 + Math.abs(Math.cos(x * 91.456)) * 0.45
 
-    if ((x * 11) % 4 > 1.0) {
+    if (Math.abs(Math.cos(x * 11.789)) > 0.3) {
       dummy.position.set(x, yR, sideOffsetR)
       dummy.rotation.set(0, (x * 0.7) % Math.PI, 0)
       dummy.scale.set(scaleR, scaleR, scaleR)
       dummy.updateMatrix()
       treeTransforms.push(dummy.matrix.clone())
+    } else {
+      dummy.position.set(x, yR + 0.3, sideOffsetR)
+      dummy.rotation.set((x * 2) % 2, (x * 4) % 2, 0)
+      dummy.scale.set(scaleR, scaleR, scaleR)
+      dummy.updateMatrix()
+      rockTransforms.push(dummy.matrix.clone())
     }
   }
 
@@ -258,38 +272,105 @@ export function createTerrain(): {
   terrainGroup.add(rockInstMesh)
 
   // ──────────────────────────────────────────────────────────────────────────
-  // 6. Start Arch & Finish Arch
+  // 6. Start Arch & Finish Arch (Architectural Gantry - Zero Z-Fighting / Overlap)
   // ──────────────────────────────────────────────────────────────────────────
+  const pylonZ = width / 2 + 0.85 // 3.6m from center (road is 2.75m from center)
+  const archH = 4.6
+  const postSize = 0.42
+  const innerSpan = pylonZ * 2 - postSize // Fits snugly between post inner faces
+  const beamHeight = 0.6
+  const beamDepth = 0.36 // Slightly slimmer than postSize (0.42) so faces are never coplanar
+
+  const postGeo = new THREE.BoxGeometry(postSize, archH, postSize)
+  const footingGeo = new THREE.BoxGeometry(postSize + 0.25, 0.35, postSize + 0.25)
+  const beamGeo = new THREE.BoxGeometry(beamDepth, beamHeight, innerSpan)
+  const collarGeo = new THREE.BoxGeometry(postSize + 0.08, beamHeight + 0.12, 0.16)
+  const signBannerGeo = new THREE.BoxGeometry(0.04, beamHeight * 0.72, 3.2)
+  const finishLineGeo = new THREE.PlaneGeometry(0.45, width - 0.3)
+  finishLineGeo.rotateX(-Math.PI / 2)
+
+  const postMat = new THREE.MeshStandardMaterial({
+    color: theme.archPost,
+    metalness: 0.7,
+    roughness: 0.35,
+  })
+  const collarMat = new THREE.MeshStandardMaterial({
+    color: 0x0f172a, // Deep slate titanium bracket
+    metalness: 0.85,
+    roughness: 0.25,
+  })
+  const signMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    emissive: 0xffffff,
+    emissiveIntensity: 0.8,
+  })
+  const lineMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.95,
+  })
+
+  const archMaterials: THREE.Material[] = [postMat, collarMat, signMat, lineMat]
+
   const createArch = (archX: number, label: string, colorHex: number) => {
     const arch = new THREE.Group()
     arch.name = `Arch_${label}`
-    const archH = 4.2
-    const archW = width + 1.2
     const y = getRoadHeight(archX)
 
-    const postGeo = new THREE.BoxGeometry(0.35, archH, 0.35)
-    const beamGeo = new THREE.BoxGeometry(0.35, 0.5, archW)
-    const postMat = new THREE.MeshStandardMaterial({ color: theme.archPost, metalness: 0.5 })
+    // Left & Right Vertical Posts with Solid Foundation Footings
+    const postL = new THREE.Mesh(postGeo, postMat)
+    postL.position.set(0, archH / 2, -pylonZ)
+    postL.castShadow = true
+
+    const footingL = new THREE.Mesh(footingGeo, postMat)
+    footingL.position.set(0, 0.175, -pylonZ)
+
+    const postR = new THREE.Mesh(postGeo, postMat)
+    postR.position.set(0, archH / 2, pylonZ)
+    postR.castShadow = true
+
+    const footingR = new THREE.Mesh(footingGeo, postMat)
+    footingR.position.set(0, 0.175, pylonZ)
+
+    // Crossbeam fits cleanly between the posts without penetrating post geometry
     const beamMat = new THREE.MeshStandardMaterial({
       color: colorHex,
       emissive: colorHex,
-      emissiveIntensity: 0.5,
+      emissiveIntensity: 0.45,
+      roughness: 0.3,
+      metalness: 0.4,
     })
+    archMaterials.push(beamMat)
 
-    const postL = new THREE.Mesh(postGeo, postMat)
-    postL.position.set(0, archH / 2, -archW / 2)
-    const postR = new THREE.Mesh(postGeo, postMat)
-    postR.position.set(0, archH / 2, archW / 2)
+    const beamY = archH - beamHeight / 2 - 0.15
     const beam = new THREE.Mesh(beamGeo, beamMat)
-    beam.position.set(0, archH, 0)
+    beam.position.set(0, beamY, 0)
+    beam.castShadow = true
 
-    arch.add(postL, postR, beam)
+    // Architectural Collar Brackets wrapping the post/beam joints (100% z-fight proof)
+    const collarL = new THREE.Mesh(collarGeo, collarMat)
+    collarL.position.set(0, beamY, -pylonZ + postSize / 2 + 0.08)
+
+    const collarR = new THREE.Mesh(collarGeo, collarMat)
+    collarR.position.set(0, beamY, pylonZ - postSize / 2 - 0.08)
+
+    // Sleek Front Accent Sign Plate
+    const sign = new THREE.Mesh(signBannerGeo, signMat)
+    sign.position.set(beamDepth / 2 + 0.025, beamY, 0)
+
+    // Asphalt Transverse Check Line beneath arch
+    const asphaltLine = new THREE.Mesh(finishLineGeo, lineMat)
+    asphaltLine.position.set(0, 0.06, 0)
+
+    arch.add(postL, footingL, postR, footingR, beam, collarL, collarR, sign, asphaltLine)
     arch.position.set(archX, y, 0)
     return arch
   }
 
-  const startArch = createArch(0, "START", 0x10b981) // Emerald
-  const finishArch = createArch(length, "FINISH", 0x06b6d4) // Cyan
+  // Start arch placed 4m ahead of spawn position (x = 0) so vehicle drives cleanly through it
+  const startArch = createArch(4.0, "START", 0x10b981) // Emerald
+  // Finish arch placed 6m before road terminus
+  const finishArch = createArch(length - 6.0, "FINISH", 0x06b6d4) // Cyan
   terrainGroup.add(startArch, finishArch)
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -315,6 +396,14 @@ export function createTerrain(): {
     trunkInstMesh.dispose()
     foliageInstMesh.dispose()
     rockInstMesh.dispose()
+
+    postGeo.dispose()
+    footingGeo.dispose()
+    beamGeo.dispose()
+    collarGeo.dispose()
+    signBannerGeo.dispose()
+    finishLineGeo.dispose()
+    archMaterials.forEach((m) => m.dispose())
   }
 
   return { terrainGroup, roadMesh, dispose }
