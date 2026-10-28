@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { memo, useEffect, useRef } from "react"
 
 interface SpeedometerGaugeProps {
   speed: number // in km/h
@@ -8,7 +8,7 @@ interface SpeedometerGaugeProps {
   className?: string
 }
 
-export default function SpeedometerGauge({
+function SpeedometerGaugeComponent({
   speed,
   maxDisplaySpeed = 100,
   className = "",
@@ -154,3 +154,5 @@ export default function SpeedometerGauge({
     </div>
   )
 }
+
+export default memo(SpeedometerGaugeComponent)

@@ -508,14 +508,16 @@ export function createCar(prefersReducedMotion: boolean = false): CarController 
     const { pitch } = getRoadSlope(x)
 
     // 1. Weight Transfer Simulation (Critically Damped Spring)
-    // Target pitch offset: squat under acceleration (front lifts, pitch > 0),
-    // dive under braking (front dips, pitch < 0).
+    // Pressing gas tilts front side UPWARDS (squat, pitch > 0)
+    // Pressing brake tilts front side DOWNWARDS (nose dive, pitch < 0)
+    const pedalTilt = (throttle * 0.065) - (brake * 0.08)
+    const accelTilt = acceleration * 0.0028
     const targetPitchOffset = prefersReducedMotion
       ? 0
-      : THREE.MathUtils.clamp(-acceleration * 0.0035, -0.075, 0.075)
+      : THREE.MathUtils.clamp(pedalTilt + accelTilt, -0.12, 0.12)
 
-    const pitchSpringK = 48
-    const pitchDampingK = 12
+    const pitchSpringK = 52
+    const pitchDampingK = 13
     const pitchForce = (targetPitchOffset - currentPitchOffset) * pitchSpringK
     currentPitchVelocity += (pitchForce - currentPitchVelocity * pitchDampingK) * dt
     currentPitchOffset += currentPitchVelocity * dt

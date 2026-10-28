@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, type PointerEvent } from "react"
+import { memo, useCallback, type PointerEvent } from "react"
 import { motion } from "framer-motion"
 
 interface PedalProps {
@@ -11,7 +11,7 @@ interface PedalProps {
   className?: string
 }
 
-export default function Pedal({
+function PedalComponent({
   type,
   isPressed,
   onPressStart,
@@ -162,3 +162,5 @@ export default function Pedal({
     </div>
   )
 }
+
+export default memo(PedalComponent)

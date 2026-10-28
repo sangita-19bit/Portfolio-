@@ -36,6 +36,10 @@ export default function HillClimbExperience({
   const [activeModalMilestone, setActiveModalMilestone] = useState<Milestone | null>(null)
   const [webGLSupported, setWebGLSupported] = useState<boolean>(true)
 
+  // Tracking refs to eliminate unnecessary React re-renders in RAF loop
+  const lastSpeedVal = useRef<number>(-1)
+  const lastDistanceVal = useRef<number>(-1)
+
   // Initialize Physics Engine once
   if (!engineRef.current) {
     engineRef.current = new CarPhysicsEngine(0)
@@ -134,16 +138,16 @@ export default function HillClimbExperience({
     const camera = new THREE.PerspectiveCamera(46, width / height, 0.5, 320)
     camera.position.set(CAMERA_CONFIG.offsetX, 6, CAMERA_CONFIG.offsetZ)
 
-    // 3. WebGL Renderer
+    // 3. WebGL Renderer (Optimized for High Refresh Rate and Low Fill-Rate Overhead)
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
       powerPreference: "high-performance",
       alpha: false,
     })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
     renderer.shadowMap.enabled = true
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap
+    renderer.shadowMap.type = THREE.PCFShadowMap
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.1
     container.appendChild(renderer.domElement)
@@ -166,18 +170,18 @@ export default function HillClimbExperience({
     scene.add(hemiLight)
 
     const sunLight = new THREE.DirectionalLight(theme.sunLight, 1.8)
-    sunLight.position.set(30, 48, 25)
+    sunLight.position.set(22, 38, 20)
     sunLight.castShadow = true
-    sunLight.shadow.mapSize.width = 1024
-    sunLight.shadow.mapSize.height = 1024
-    sunLight.shadow.camera.near = 1
-    sunLight.shadow.camera.far = 130
-    const d = 26
+    sunLight.shadow.mapSize.width = 512
+    sunLight.shadow.mapSize.height = 512
+    sunLight.shadow.camera.near = 2
+    sunLight.shadow.camera.far = 110
+    const d = 16
     sunLight.shadow.camera.left = -d
     sunLight.shadow.camera.right = d
     sunLight.shadow.camera.top = d
     sunLight.shadow.camera.bottom = -d
-    sunLight.shadow.bias = -0.0004
+    sunLight.shadow.bias = -0.0005
     scene.add(sunLight)
 
     // 5. Build Subsystems: Terrain, Car, and Milestone Markers
@@ -228,13 +232,13 @@ export default function HillClimbExperience({
     window.addEventListener("keyup", onKeyUp)
 
     // 7. Motion & Chase Camera Tracking (Frame-Rate Independent)
-    const targetCamPos = new THREE.Vector3()
     const targetLookAt = new THREE.Vector3()
     const currentLookAt = new THREE.Vector3(0, 2, 0)
 
     const clock = new THREE.Clock()
     let animationFrameId: number
     let lastUiUpdate = 0
+    let lastDistanceUiUpdate = 0
     let isVisible = true
 
     // Off-screen pause optimization via IntersectionObserver
@@ -255,9 +259,11 @@ export default function HillClimbExperience({
 
       if (!isVisible) return
 
-      const dt = clock.getDelta()
+      // Clamped delta time prevents teleporting/spikes on micro frame drops
+      const rawDt = clock.getDelta()
+      const dt = Math.max(0.001, Math.min(rawDt, 0.04))
 
-      // Physics Simulation Step with fixed-timestep sub-stepping
+      // Physics Simulation Step with sub-stepping (smooth monotonic progress every frame)
       const {
         x,
         speed: currentSpeed,
@@ -287,66 +293,73 @@ export default function HillClimbExperience({
       skyMesh.position.x = x
 
       // ──────────────────────────────────────────────────────────────────────
-      // Polished Chase Camera with Frame-Rate Independent Exponential Decay
-      // alpha = 1 - Math.exp(-k * dt)
+      // Polished Chase Camera: Frame-Rate Independent Axis-Decoupled Smoothing
+      // Tight horizontal tracking keeps car anchored; smooth vertical damping absorbs hills.
       // ──────────────────────────────────────────────────────────────────────
-      const posDampK = prefersReducedMotion ? 3.0 : 5.2
-      const lookDampK = prefersReducedMotion ? 3.5 : 6.2
-      const posAlpha = 1 - Math.exp(-posDampK * dt)
-      const lookAlpha = 1 - Math.exp(-lookDampK * dt)
+      const posXAlpha = 1 - Math.exp(-(prefersReducedMotion ? 6.5 : 11.5) * dt)
+      const posYAlpha = 1 - Math.exp(-(prefersReducedMotion ? 4.5 : 7.2) * dt)
+      const posZAlpha = 1 - Math.exp(-6.5 * dt)
+      const lookAlpha = 1 - Math.exp(-(prefersReducedMotion ? 4.0 : 7.5) * dt)
 
       // 1. Dynamic Look-ahead based on forward speed (stable under reverse)
       const forwardSpeed = Math.max(0, currentSpeed)
       const speedRatio = Math.min(1, forwardSpeed / CAR_PHYSICS.maxSpeed)
-      const forwardLookAhead = 6.5 + speedRatio * 5.5
+      const forwardLookAhead = 6.5 + speedRatio * 5.0
 
       targetLookAt.set(
         x + forwardLookAhead,
-        getRoadHeight(x + forwardLookAhead) + 1.4,
+        getRoadHeight(x + forwardLookAhead) + 1.2,
         0
       )
       currentLookAt.lerp(targetLookAt, lookAlpha)
       camera.lookAt(currentLookAt)
 
-      // 2. Dynamic FOV Widening with Velocity (clamped)
+      // 2. Dynamic FOV Widening with Velocity (throttled projection update)
       const baseFov = 46
-      const targetFov = prefersReducedMotion ? baseFov : baseFov + speedRatio * 4.5
+      const targetFov = prefersReducedMotion ? baseFov : baseFov + speedRatio * 4.0
       const fovAlpha = 1 - Math.exp(-4.0 * dt)
-      if (Math.abs(camera.fov - targetFov) > 0.05) {
+      if (Math.abs(camera.fov - targetFov) > 0.18) {
         camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, fovAlpha)
         camera.updateProjectionMatrix()
       }
 
       // 3. Steep Climb Camera Framing
       const { pitch } = getRoadSlope(x)
-      const climbBonus = Math.max(0, pitch) * 5.5
+      const climbBonus = Math.max(0, pitch) * 5.0
 
       // 4. Chase Camera Position Calculation
       const carY = getRoadHeight(x)
-      targetCamPos.set(
-        x + CAMERA_CONFIG.offsetX - climbBonus * 0.8,
+      const targetX = x + CAMERA_CONFIG.offsetX - climbBonus * 0.8
+      const terrainYAtCam = getRoadHeight(targetX)
+      const safeTargetY = Math.max(
         carY + CAMERA_CONFIG.offsetY + climbBonus * 0.6,
-        CAMERA_CONFIG.offsetZ + climbBonus * 0.5
+        terrainYAtCam + 3.0
       )
+      const targetZ = CAMERA_CONFIG.offsetZ + climbBonus * 0.5
 
-      // 5. Terrain Ground Collision Prevention: Never drop below terrain surface
-      const terrainYAtCam = getRoadHeight(targetCamPos.x)
-      const minCamY = terrainYAtCam + 2.8
-      targetCamPos.y = Math.max(targetCamPos.y, minCamY)
-
-      camera.position.lerp(targetCamPos, posAlpha)
-      camera.position.y = Math.max(camera.position.y, minCamY)
+      // Smooth axis-specific lerp: no hard clipping snaps
+      camera.position.x += (targetX - camera.position.x) * posXAlpha
+      camera.position.y += (safeTargetY - camera.position.y) * posYAlpha
+      camera.position.z += (targetZ - camera.position.z) * posZAlpha
 
       // Move Sunlight along with car to maintain local crisp shadows
-      sunLight.position.set(x + 22, carY + 38, 22)
+      sunLight.position.set(x + 18, carY + 34, 18)
       sunLight.target.position.set(x, carY, 0)
       sunLight.target.updateMatrixWorld()
 
-      // Throttle React HUD state updates to ~15fps for zero frame drops
+      // Throttle React HUD state updates: only trigger re-render when values actually change
       const now = performance.now()
-      if (now - lastUiUpdate > 65) {
-        setSpeed(Math.round(Math.abs(currentSpeed) * 3.6))
-        setDistance(x)
+      if (now - lastUiUpdate > 75) {
+        const roundedSpeed = Math.round(Math.abs(currentSpeed) * 3.6)
+        if (roundedSpeed !== lastSpeedVal.current) {
+          lastSpeedVal.current = roundedSpeed
+          setSpeed(roundedSpeed)
+        }
+        if (now - lastDistanceUiUpdate > 120 && Math.abs(x - lastDistanceVal.current) > 0.8) {
+          lastDistanceVal.current = x
+          setDistance(x)
+          lastDistanceUiUpdate = now
+        }
         lastUiUpdate = now
       }
 

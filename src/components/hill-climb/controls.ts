@@ -19,10 +19,6 @@ export class CarPhysicsEngine {
   private currentThrottle: number = 0
   private currentBrake: number = 0
 
-  // Fixed timestep physics accumulator
-  private accumulator: number = 0
-  private readonly fixedDt: number = 1 / 120 // 120Hz physics simulation
-
   // Dynamic state telemetry
   private currentAcceleration: number = 0
   private isReversing: boolean = false
@@ -72,7 +68,6 @@ export class CarPhysicsEngine {
     this.currentThrottle = 0
     this.currentBrake = 0
     this.currentAcceleration = 0
-    this.accumulator = 0
   }
 
   /**
@@ -88,16 +83,18 @@ export class CarPhysicsEngine {
     brake: number
     isReversing: boolean
   } {
-    // Clamp frame dt to 0.05s to prevent simulation explosion on tab unfocus
-    const clampedDt = Math.min(frameDt, 0.05)
-    this.accumulator += clampedDt
+    // Clamp frame dt to prevent simulation explosion on tab unfocus or frame spike
+    const clampedDt = Math.max(0.001, Math.min(frameDt, 0.04))
+
+    // Sub-step physics so every render frame receives smooth, continuous, non-jittered movement
+    // at any refresh rate (60Hz, 120Hz, 144Hz, 240Hz, or variable mobile fps)
+    const subSteps = Math.max(1, Math.min(3, Math.ceil(clampedDt / (1 / 120))))
+    const subDt = clampedDt / subSteps
 
     const prevX = this.state.x
 
-    // Run fixed timestep sub-steps
-    while (this.accumulator >= this.fixedDt) {
-      this.stepFixedPhysics(this.fixedDt)
-      this.accumulator -= this.fixedDt
+    for (let i = 0; i < subSteps; i++) {
+      this.stepFixedPhysics(subDt)
     }
 
     const deltaDistance = this.state.x - prevX

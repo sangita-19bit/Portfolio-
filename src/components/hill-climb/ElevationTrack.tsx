@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { memo, useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { MILESTONES } from "./milestones"
 import { ROAD_CONFIG } from "./config"
@@ -13,7 +13,7 @@ interface ElevationTrackProps {
   className?: string
 }
 
-export default function ElevationTrack({
+function ElevationTrackComponent({
   currentDistance,
   onMilestoneClick,
   className = "",
@@ -209,3 +209,5 @@ export default function ElevationTrack({
     </div>
   )
 }
+
+export default memo(ElevationTrackComponent)

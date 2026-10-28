@@ -136,6 +136,8 @@ export function createMilestoneMarkers(
   const labelElements: {
     element: HTMLElement
     worldX: number
+    visible?: boolean
+    lastOpacity?: string
   }[] = []
 
   const disposables: { dispose: () => void }[] = [dropletTexture]
@@ -341,25 +343,36 @@ export function createMilestoneMarkers(
   const maxLabelDistance = 55
 
   const update = (carX: number, dt: number) => {
-    // 1. Update Labels Fade-In based on distance to car
-    labelElements.forEach(({ element, worldX }) => {
-      const dist = Math.abs(carX - worldX)
+    // 1. Update Labels Fade-In based on distance to car (throttled DOM style writes)
+    labelElements.forEach((item) => {
+      const dist = Math.abs(carX - item.worldX)
       if (dist > maxLabelDistance) {
-        element.style.opacity = "0"
-        element.style.visibility = "hidden"
+        if (item.visible !== false) {
+          item.element.style.opacity = "0"
+          item.element.style.visibility = "hidden"
+          item.visible = false
+          item.lastOpacity = "0"
+        }
       } else {
-        element.style.visibility = "visible"
+        if (item.visible !== true) {
+          item.element.style.visibility = "visible"
+          item.visible = true
+        }
         const opacity = Math.min(1, Math.max(0, (maxLabelDistance - dist) / 18))
-        element.style.opacity = opacity.toFixed(2)
+        const opStr = opacity.toFixed(2)
+        if (item.lastOpacity !== opStr) {
+          item.element.style.opacity = opStr
+          item.lastOpacity = opStr
+        }
       }
     })
 
     // If reduced motion is requested, freeze particle physics for accessibility
     if (reducedMotion) return
 
-    // 2. Update Fountain Particle Physics (Capped to visible markers within 65 units)
+    // 2. Update Fountain Particle Physics (Capped to visible markers within 38 units)
     fountains.forEach(({ system, worldX }) => {
-      if (Math.abs(carX - worldX) > 65) return
+      if (Math.abs(carX - worldX) > 38) return
 
       const { positions, velocities, lifespans, maxLifespans, count, spoutY, geometry } = system
 

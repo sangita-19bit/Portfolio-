@@ -114,7 +114,7 @@ export const CAR_PHYSICS: CarPhysicsConfig = {
 export const CAR_CONFIG = {
   // Optional external glTF / GLB model path (drop model in public/models/car.glb)
   modelPath: "/models/car.glb",
-  useExternalModelIfAvailable: true,
+  useExternalModelIfAvailable: false,
   scale: 1.0,
   wheelRadius: 0.42,
   wheelBase: 0.95,
